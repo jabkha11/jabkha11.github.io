@@ -1,0 +1,220 @@
+
+ <div class="page-title-holder">
+                        <h2 class="entry-title">
+                            Link Scheduler                        </h2>
+                    </div>
+
+<div id="smooth-block">
+<p class="milestone-num">Enter link then choose time </p>
+
+
+<input type="datetime-local" id="scedule0"
+onchange="date_changed(this.value, this.id)">
+
+<input onchange="linkchanged()" placeholder="Enter Link" id="urlchosen0" type="url"></input>
+
+    
+
+</div>
+
+<style>
+body{
+ font-family: 'Rubik', sans-serif;
+line-height: 100%;
+    font-weight: 700;
+
+background-color: black;
+}
+.page-title-holder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #47ea4e;
+    width: 285px;
+    display: inline-block;
+    z-index: 98;
+    height: 130px;
+}
+
+.page-title-holder:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 130px 60px 0 0;
+    border-color: #47ea4e transparent transparent transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+}
+
+h2.entry-title {
+    font-size: 19px;
+    line-height: 145%;
+    font-weight: 400;
+    word-break: break-word;
+    text-align: center;
+    color: #fff;
+    letter-spacing: 2px;
+    margin-top: 40px;
+}
+
+#smooth-block{
+margin-top:175px;
+}
+p.milestone-num{
+font-size:20px;
+margin-left:15%;
+position:static;
+color:#b3b3b3;
+text-shadow:none;
+}
+@media only screen and (max-width: 600px) {
+  input {
+    margin-left:0px !important;
+  }
+}
+::placeholder{
+color:#d3d3d3;
+}
+input { 
+width: 21rem;	
+color: #d3d3d3 ;
+border-radius:5px;
+font-family: 'Rubik', sans-serif;
+font-size: 18px;
+line-height: 35px;
+font-weight: 400;
+margin-left:15%;
+margin-bottom:20px;
+ border-style: solid;
+  border-color: #f8f8ff;
+border-width:5px;
+}
+::-webkit-datetime-edit { 
+
+}
+::-webkit-datetime-edit-fields-wrapper { 
+	font-family: 'Rubik', sans-serif;
+font-size: 18px;
+    line-height: 35px;
+    font-weight: 400;
+
+}
+::-webkit-datetime-edit-text {
+	color: #d3d3d3;
+	padding: 0 0.5em;
+font-family: 'Rubik', sans-serif;
+font-size: 18px;
+    line-height: 35px;
+    font-weight: 400;
+}
+::-webkit-datetime-edit-month-field ::-webkit-datetime-edit-day-field ::-webkit-datetime-edit-year-field[aria-valuetext=blank] ::-webkit-datetime-edit-year-field  {
+	color: white;
+font-family: 'Rubik', sans-serif;
+}
+
+}
+::-webkit-inner-spin-button {
+	display: none;
+}
+::-webkit-clear-button {
+	display: none;
+	-webkit-appearance: none;
+}
+
+
+</style>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+var datd = document.getElementById('scedule0');
+
+
+// Popup Check
+function PopupBlocked() {
+    var test = window.open(null, "", "width=10,height=10");
+    try {
+        test.close();
+        return false;
+    } catch (e) {
+        return true;
+    }
+}
+
+
+if (PopupBlocked()) {
+    alert('Please allow popups');
+    console.log("popup blocked");
+}
+//Popup Check end
+
+//Link redirect
+function date_changed(date_chosen, my_id) {
+
+    let url_id = my_id.replace("scedule", "urlchosen")
+    let date = new Date(date_chosen)
+
+    console.log((date - new Date()), date.getTime())
+    setTimeout(() => {
+        let url = document.getElementById(url_id).value
+        console.log(url)
+
+        if (url == "") {
+
+            alert("You did not enter the Url before selecting the date. Please reload the page and try again");
+            window.location.reload(true);
+
+        } else {
+            window.open(url, "_tab")
+        };
+    }, (date.getTime() - new Date()))
+
+
+}
+//link redirect end 
+
+let arrayselect = 0;
+
+let chosenurl = ["urlchosen", "urlchosen1", "urlchosen2", "urlchosen3", "urlchosen4", "urlchosen5"];
+var counter = arrayselect + 1;
+var linkd = document.getElementById("urlchosen"+arrayselect);
+
+function linkchanged() {
+ 
+if (document.getElementById("urlchosen"+arrayselect).value.slice(0, 8) != "https://" && document.getElementById("urlchosen"+arrayselect).value.slice(0, 7) != "http://") {
+	document.getElementById("urlchosen"+arrayselect).value="http://"+document.getElementById("urlchosen"+arrayselect).value;
+   }
+arrayselect += 1
+    duplicate();
+if (arrayselect>1){
+document.getElementById("urlchosen"+(arrayselect-1)).removeAttribute("onchange");
+}
+
+
+    $("input").fadeIn()
+
+    
+
+
+   
+	document.getElementById("urlchosen"+arrayselect).value = "";
+	document.getElementById("scedule"+arrayselect).value = "";
+}
+
+var counter = arrayselect + 1;
+
+function duplicate() {
+    for (var i = 0; i < counter; i++) {
+        var clone = datd.cloneNode(true);
+        var clone2 = linkd.cloneNode(true);
+        console.log(clone, clone2)
+        clone.id = "scedule" + arrayselect;
+        datd.parentNode.appendChild(clone);
+        clone2.id = "urlchosen"+arrayselect;
+        linkd.parentNode.appendChild(clone2);
+        clone.style.display = "none";
+        clone2.style.display = "none";
+    }
+}
+</script>
